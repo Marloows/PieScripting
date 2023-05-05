@@ -42,7 +42,7 @@ def line_separator(
 
 def solidify(f: Callable):
    @wraps(f)
-   def wrapper(S:Iterator | Iterable, *args, **kwargs):
+   def wrapper(S, *args, **kwargs):
       return f(tuple(S), *args, **kwargs)
    return wrapper
 
