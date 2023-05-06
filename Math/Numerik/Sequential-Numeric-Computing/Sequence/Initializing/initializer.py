@@ -15,6 +15,26 @@ from functools import wraps
 
 ## ------------------------------------ ##
 
+      #### Sequencing Algorithm ####
+
+def independent_yielder(f:Callable, n0, h) -> Generator:
+   @wraps(f)
+   def yielder(n = n0, h = h):
+      while True:		# infinite yielder!!!
+         yield n, f(n)
+         n += h
+   return yielder()
+
+def depended_yielder(f:Callable, n0, *a_, h) -> Generator:
+   @wraps(f)
+   def yielder(n = n0, a_ = a_, h = h):
+      while True:		# infinite yielder!!!
+         a = f(n, *a_)
+         yield n, a
+         a_ = [*a_[1:], a]		# update dependencies
+         n += h
+   return yielder()
+
 #############################################
 ################ FORMATTING #################
 #############################################
@@ -172,24 +192,6 @@ def show_rounded(A:Callable, n: int = 10, rounded2:int = 6) -> None:
 ###############################################
 ################ Initializing #################
 ###############################################
-
-def independent_yielder(f:Callable, n0, h) -> Generator:
-   @wraps(f)
-   def yielder(n = n0, h = h):
-      while True:		# infinite yielder!!!
-         yield n, f(n)
-         n += h
-   return yielder()
-
-def depended_yielder(f:Callable, n0, *a_, h) -> Generator:
-   @wraps(f)
-   def yielder(n = n0, a_ = a_, h = h):
-      while True:		# infinite yielder!!!
-         a = f(n, *a_)
-         yield n, a
-         a_ = [*a_[1:], a]		# update dependencies
-         n += h
-   return yielder()
 
 def post_process(processor:Callable):
    def decorator(f:Callable):
